@@ -2,15 +2,18 @@
 #include <vector>
 #include <algorithm>
 #include <cstdio>
+#include <cstring> // Added for memset
 
 using namespace std;
 
+// Represents a type of rectangular piece with width, height, and value.
 struct Piece {
     int width;
     int height;
     int value;
 };
 
+// Represents a rectangle with top-left corner coordinates (x, y), width, and height.
 struct Rect {
     int x;
     int y;
@@ -18,60 +21,98 @@ struct Rect {
     int height;
 };
 
-// Memoization table
+// Define a constant for representing an uninitialized state in the DP table.
+const int UNINITIALIZED = -1;
+
+// Create a 2D DP table for memoization.
 vector<vector<int>> dp;
 
+/**
+ * Recursive function to maximize the value of packing pieces into a rectangular space.
+ *
+ * @param rect The current available rectangular space.
+ * @param pieces A vector containing different types of pieces to be packed.
+ * @return The maximum value achievable by packing the pieces into the given space.
+ */
 int guillotineMaximizeValue(const Rect& rect, vector<Piece>& pieces) {
-    if (rect.width <= 0 || rect.height <= 0) {
-        return 0;  // Base case: no area left
-    }
-
-    if (dp[rect.width][rect.height] != -1) {
-        return dp[rect.width][rect.height];  // Return memoized result if available
+    // Check if the result for the current subproblem is already memoized.
+    if (static_cast<size_t>(rect.width) < dp.size() && static_cast<size_t>(rect.height) < dp[0].size() && dp[rect.width][rect.height] != UNINITIALIZED) {
+        return dp[rect.width][rect.height];
     }
 
     int max_value = 0;
 
+    // Iterate through each piece in the vector.
     for (Piece& piece : pieces) {
+        // Consider both orientations of the piece.
         for (int rotation = 0; rotation < 2; ++rotation) {
-            int piece_width = (rotation == 0) ? piece.width : piece.height;
-            int piece_height = (rotation == 0) ? piece.height : piece.width;
+            // Dynamically determine piece width and height based on rotation.
+            int piece_width, piece_height;
 
+            if (rotation == 0) {
+                piece_width = piece.width;
+                piece_height = piece.height;
+            } else {
+                piece_width = piece.height;
+                piece_height = piece.width;
+            }
+
+            // Check if the piece can fit into the current available space.
             if (piece_width <= rect.width && piece_height <= rect.height) {
+                // Create two possible rectangles after placing the current piece.
                 Rect rect1 = {rect.x + piece_width, rect.y, rect.width - piece_width, rect.height};
                 Rect rect2 = {rect.x, rect.y + piece_height, piece_width, rect.height - piece_height};
 
-                int current_value = piece.value + guillotineMaximizeValue(rect1, pieces) +
-                                   guillotineMaximizeValue(rect2, pieces);
+                // Calculate the value for the current piece placement recursively.
+                int current_value = piece.value + guillotineMaximizeValue(rect1, pieces) + guillotineMaximizeValue(rect2, pieces);
 
+                // Update the maximum value.
                 max_value = max(max_value, current_value);
             }
         }
     }
 
-    // Memoize the result
-    dp[rect.width][rect.height] = max_value;
+    // Memoize the result for the current subproblem.
+    if (static_cast<size_t>(rect.width) < dp.size() && static_cast<size_t>(rect.height) < dp[0].size() && dp[rect.width][rect.height] != UNINITIALIZED) {
+        dp[rect.width][rect.height] = max_value;
+    }
+
+
     return max_value;
 }
 
+/**
+ * Function to find the maximum value achievable by packing pieces into a rectangular space.
+ *
+ * @param X Width of the initial rectangular space.
+ * @param Y Height of the initial rectangular space.
+ * @param pieces A vector containing different types of pieces to be packed.
+ * @return The maximum value achievable by packing the pieces into the given space.
+ */
 int maximizeValue(int X, int Y, vector<Piece>& pieces) {
+    // Create an initial rectangle representing the full available space.
     Rect initial_rect = {0, 0, X, Y};
-    dp.assign(X + 1, vector<int>(Y + 1, -1));  // Initialize memoization table
+
+    dp.assign(X + 1, vector<int>(Y + 1, UNINITIALIZED));
+
+    // Test both orientations and choose the one with the maximum value.
     return max(guillotineMaximizeValue(initial_rect, pieces), guillotineMaximizeValue({0, 0, Y, X}, pieces));
 }
 
 int main() {
     int X, Y;
-    int inputCount1 = scanf("%d %d", &X, &Y);
+    scanf("%d %d", &X, &Y);
 
     int n;
-    int inputCount2 = scanf("%d", &n);
+    scanf("%d", &n);
 
+    // Read information about each type of piece
     vector<Piece> pieces(n);
     for (int i = 0; i < n; ++i) {
-        int inputCount3 = scanf("%d %d %d", &pieces[i].width, &pieces[i].height, &pieces[i].value);
+        scanf("%d %d %d", &pieces[i].width, &pieces[i].height, &pieces[i].value);
     }
 
+    // Calculate the maximum total value and print the result
     int result = maximizeValue(X, Y, pieces);
     printf("%d\n", result);
 
