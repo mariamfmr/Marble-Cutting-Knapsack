@@ -1,45 +1,68 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <cstdio>
 
 using namespace std;
 
-int maximizeValue(int X, int Y, vector<vector<int>>& pieces) {
-    vector<vector<int>> dp(X + 1, vector<int>(Y + 1, 0));
+struct Piece {
+    int width;
+    int height;
+    int value;
+};
 
-    for (int i = 1; i <= X; ++i) {
-        for (int j = 1; j <= Y; ++j) {
-            for (auto& piece : pieces) {
-                int ai = piece[0];
-                int bi = piece[1];
-                int pi = piece[2];
+struct Rect {
+    int x;
+    int y;
+    int width;
+    int height;
+};
 
-                if (i >= ai && j >= bi) {
-                    dp[i][j] = max(dp[i][j], dp[i - ai][j - bi] + pi);
-                }
+int guillotineMaximizeValue(const Rect& rect, vector<Piece>& pieces) {
+    int max_value = 0;
+
+    for (const Piece& piece : pieces) {
+        // Consider both orientations of the piece
+        for (int rotation = 0; rotation < 2; ++rotation) {
+            int piece_width = (rotation == 0) ? piece.width : piece.height;
+            int piece_height = (rotation == 0) ? piece.height : piece.width;
+
+            if (piece_width <= rect.width && piece_height <= rect.height) {
+                // Create two possible rectangles after placing the current piece
+                Rect rect1 = { rect.x + piece_width, rect.y, rect.width - piece_width, piece_height };
+                Rect rect2 = { rect.x, rect.y + piece_height, rect.width, rect.height - piece_height };
+
+                // Calculate the value for the current piece placement
+                int current_value = piece.value + guillotineMaximizeValue(rect1, pieces) + guillotineMaximizeValue(rect2, pieces);
+
+                // Update the maximum value
+                max_value = max(max_value, current_value);
             }
         }
     }
 
-    return dp[X][Y];
+    return max_value;
+}
+
+int maximizeValue(int X, int Y, vector<Piece>& pieces) {
+    Rect initial_rect = {0, 0, X, Y};
+    return guillotineMaximizeValue(initial_rect, pieces);
 }
 
 int main() {
     int X, Y;
-    cin >> X >> Y;
+    scanf("%d %d", &X, &Y);
 
     int n;
-    cin >> n;
+    scanf("%d", &n);
 
-    vector<vector<int>> pieces(n, vector<int>(3));
-
+    vector<Piece> pieces(n);
     for (int i = 0; i < n; ++i) {
-        cin >> pieces[i][0] >> pieces[i][1] >> pieces[i][2];
+        scanf("%d %d %d", &pieces[i].width, &pieces[i].height, &pieces[i].value);
     }
 
     int result = maximizeValue(X, Y, pieces);
-
-    cout << result << endl;
+    printf("%d\n", result);
 
     return 0;
 }
