@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <unordered_map>
 
 using namespace std;
 
@@ -11,14 +10,15 @@ struct Piece {
     int value;
 };
 
-unordered_map<int, unordered_map<int, int>> dp;  // Memoization table
+// Matrix for memoization
+vector<vector<int>> dp;
 
 int guillotineMaximizeValue(int x, int y, int width, int height, vector<Piece>& pieces) {
     if (width <= 0 || height <= 0) {
         return 0;
     }
 
-    if (dp.find(width) != dp.end() && dp[width].find(height) != dp[width].end()) {
+    if (dp[width][height] != -1) {
         return dp[width][height];
     }
 
@@ -53,7 +53,13 @@ int guillotineMaximizeValue(int x, int y, int width, int height, vector<Piece>& 
 }
 
 int maximizeValue(int X, int Y, vector<Piece>& pieces) {
-    return max(guillotineMaximizeValue(0, 0, X, Y, pieces), guillotineMaximizeValue(0, 0, Y, X, pieces));
+    // Initialize the memoization table with -1
+    dp.assign(X + 1, vector<int>(Y + 1, -1));
+
+    // Calculate maximum value for both orientations
+    int result = max(guillotineMaximizeValue(0, 0, X, Y, pieces), guillotineMaximizeValue(0, 0, X, Y, pieces));
+
+    return result;
 }
 
 int main() {
@@ -71,6 +77,14 @@ int main() {
 
     int result = maximizeValue(X, Y, pieces);
     printf("%d\n", result);
+
+    // Print the dp matrix
+    cout << "Memoization table (dp):" << endl;
+    for (int i = 0; i <= X; ++i) {
+        for (int j = 0; j <= Y; ++j) {
+            cout << "dp[" << i << "][" << j << "] = " << dp[i][j] << endl;
+        }
+    }
 
     return 0;
 }

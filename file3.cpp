@@ -10,16 +10,19 @@ struct Piece {
     int height;
     int value;
 };
-
+// M*N 
 struct Rect {
     int x;
     int y;
     int width;
     int height;
 };
+// TOP DOWN
+//M*N * (log(M)+log(N))
 
+// BOTTOM UP para inputs pequenos , ou seja < M*N* log(M)* log(N)
 unordered_map<int, unordered_map<int, int>> dp;  // Memoization table
-
+//
 int guillotineMaximizeValue(const Rect& rect, vector<Piece>& pieces) {
     if (rect.width <= 0 || rect.height <= 0) {
         return 0;
@@ -49,9 +52,10 @@ int guillotineMaximizeValue(const Rect& rect, vector<Piece>& pieces) {
 
                 int current_value = piece.value + guillotineMaximizeValue(rect1, pieces) + guillotineMaximizeValue(rect2, pieces);
 
-                max_value = max(max_value, current_value);
+                max_value = (current_value > max_value) ? current_value : max_value;
             }
         }
+        
     }
 
     dp[rect.width][rect.height] = max_value;
@@ -65,18 +69,19 @@ int maximizeValue(int X, int Y, vector<Piece>& pieces) {
 
 int main() {
     int X, Y;
-    cin >> X >> Y;
+    scanf("%d %d", &X, &Y);
 
     int n;
-    cin >> n;
+    scanf("%d", &n);
 
     vector<Piece> pieces(n);
     for (int i = 0; i < n; ++i) {
-        cin >> pieces[i].width >> pieces[i].height >> pieces[i].value;
+        scanf("%d %d %d", &pieces[i].width, &pieces[i].height, &pieces[i].value);
     }
 
     int result = maximizeValue(X, Y, pieces);
-    cout << result << endl;
+    printf("%d\n", result);
 
     return 0;
 }
+
