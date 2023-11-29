@@ -5,35 +5,16 @@
 using namespace std;
 
 // Function to find the maximum value obtainable by cutting a given rectangle
-int maximizeValue(int X, int Y, vector<vector<int>>& pieces) {
-    vector<vector<int>> dp(X + 1, vector<int>(Y + 1, 0));
-
-    // Organize the matrix with the pieces and their costs
-    for (const vector<int>& piece : pieces) {
-        int pieceWidth = piece[0];
-        int pieceHeight = piece[1];
-        int pieceValue = piece[2];
-
-        // Check if the piece fits without rotation
-        if (pieceWidth <= X && pieceHeight <= Y) {
-            dp[pieceWidth][pieceHeight] = max(dp[pieceWidth][pieceHeight], pieceValue);
-        }
-
-        // Check if the rotated piece fits
-        if (pieceHeight <= X && pieceWidth <= Y) {
-            dp[pieceHeight][pieceWidth] = max(dp[pieceHeight][pieceWidth], pieceValue);
-        }
-    }
-
+int maximizeValue(int X, int Y, vector<vector<int>>& dp) {
     // Iterate over all possible combinations of guillotine cuts
     for (int i = 1; i <= X; i++) {
         for (int j = 1; j <= Y; j++) {
             // Consider each guillotine cut and check if it can fit in the current rectangle
-            for (int cutWidth = 1; cutWidth <= i / 2; cutWidth++) {
+            for (int cutWidth = 1; cutWidth <= i; cutWidth++) {
                 dp[i][j] = max(dp[i][j], dp[cutWidth][j] + dp[i - cutWidth][j]);
             }
 
-            for (int cutHeight = 1; cutHeight <= j / 2; cutHeight++) {
+            for (int cutHeight = 1; cutHeight <= j; cutHeight++) {
                 dp[i][j] = max(dp[i][j], dp[i][cutHeight] + dp[i][j - cutHeight]);
             }
         }
@@ -53,14 +34,25 @@ int main() {
     int n;
     scanf("%d", &n);
 
-    // Read the details of each piece (width, height, value)
-    vector<vector<int>> pieces(n, vector<int>(3));
+    // Read the details of each piece (width, height, value) and organize in the matrix
+    vector<vector<int>> dp(X + 1, vector<int>(Y + 1, 0));
     for (int i = 0; i < n; ++i) {
-        scanf("%d %d %d", &pieces[i][0], &pieces[i][1], &pieces[i][2]);
+        int pieceWidth, pieceHeight, pieceValue;
+        scanf("%d %d %d", &pieceWidth, &pieceHeight, &pieceValue);
+
+        // Check if the piece fits without rotation
+        if (pieceWidth <= X && pieceHeight <= Y) {
+            dp[pieceWidth][pieceHeight] = max(dp[pieceWidth][pieceHeight], pieceValue);
+        }
+
+        // Check if the rotated piece fits
+        if (pieceHeight <= X && pieceWidth <= Y) {
+            dp[pieceHeight][pieceWidth] = max(dp[pieceHeight][pieceWidth], pieceValue);
+        }
     }
 
     // Find and print the maximum value obtainable
-    int result = maximizeValue(X, Y, pieces);
+    int result = maximizeValue(X, Y, dp);
     printf("%d\n", result);
 
     return 0;
