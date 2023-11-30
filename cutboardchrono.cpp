@@ -1,8 +1,10 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <chrono>
 
 using namespace std;
+using namespace std::chrono;
 
 // Function to find the maximum value obtainable by cutting a given rectangle
 int maximizeValue(int X, int Y, vector<vector<int>>& dp) {
@@ -26,6 +28,9 @@ int maximizeValue(int X, int Y, vector<vector<int>>& dp) {
 
 // Main function
 int main() {
+    // Start clock
+    auto start = high_resolution_clock::now();
+
     // Read the dimensions of the original rectangle
     int X, Y;
     scanf("%d %d", &X, &Y);
@@ -54,6 +59,13 @@ int main() {
     // Find and print the maximum value obtainable
     int result = maximizeValue(X, Y, dp);
     printf("%d\n", result);
+
+    // Measure the runtime duration
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(stop - start);
+
+    printf("%ld ms",duration.count());
+
 
     return 0;
 }

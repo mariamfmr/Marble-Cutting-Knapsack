@@ -10,18 +10,15 @@ INPUT_FILES = $(wildcard tests/*.in)
 OUTPUT_FILES = $(patsubst %.in, %.out, $(INPUT_FILES))
 
 # Default target
-all: $(TARGET) run_tests
+all: $(TARGET) $(OUTPUT_FILES)
 
 # Compile the main program
 $(TARGET): cutboardchrono.cpp
 	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
 
-# Rule to run the program on each input file
-run_tests: $(OUTPUT_FILES)
-
-# Rule to create output file for each input file
+# Rule to run the program on each input file and redirect the output to .out files
 %.out: %.in $(TARGET)
-	./$(TARGET) < $< > $@
+	./$(TARGET) < $< > $@ 2>&1
 
 # Clean up compiled files and generated output files
 clean:
