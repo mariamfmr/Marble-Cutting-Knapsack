@@ -1,8 +1,10 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <chrono>
 
 using namespace std;
+using namespace std::chrono;
 
 // Function to find the maximum value obtainable by cutting a given rectangle
 int maximizeValue(int X, int Y, vector<vector<int>>& dp) {
@@ -10,11 +12,11 @@ int maximizeValue(int X, int Y, vector<vector<int>>& dp) {
     for (int i = 1; i <= X; i++) {
         for (int j = 1; j <= Y; j++) {
             // Consider each guillotine cut and check if it can fit in the current rectangle
-            for (int cutWidth = 1; cutWidth <= i; cutWidth++) {
+            for (int cutWidth = 1; cutWidth <= i/2; cutWidth++) {
                 dp[i][j] = max(dp[i][j], dp[cutWidth][j] + dp[i - cutWidth][j]);
             }
 
-            for (int cutHeight = 1; cutHeight <= j; cutHeight++) {
+            for (int cutHeight = 1; cutHeight <= j/2; cutHeight++) {
                 dp[i][j] = max(dp[i][j], dp[i][cutHeight] + dp[i][j - cutHeight]);
             }
         }
@@ -26,6 +28,8 @@ int maximizeValue(int X, int Y, vector<vector<int>>& dp) {
 
 // Main function
 int main() {
+    // Start clock
+    auto start = high_resolution_clock::now();
     // Read the dimensions of the original rectangle
     int X, Y;
     scanf("%d %d", &X, &Y);
@@ -54,6 +58,13 @@ int main() {
     // Find and print the maximum value obtainable
     int result = maximizeValue(X, Y, dp);
     printf("%d\n", result);
+
+    // Measure the runtime duration
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(stop - start);
+
+    printf("%ld ms",duration.count());
+
 
     return 0;
 }
