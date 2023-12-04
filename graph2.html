@@ -4,6 +4,7 @@
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
+      google.charts.setOnLoadCallback(drawChart2); // Add this line for the second chart
 
       function f(X) {
           // Calculates O(n^3 / 2)
@@ -22,21 +23,21 @@
 
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
-          ['X+Y', 'Time / X+Y * O(n^3)'],
-          [10**3 , 0],
-          [100**3, 1],
-          [1000**3, 94 ],
-          [2000**3, 750 ],
-          [3000**3, 2940 ],
-          [4000**3, 7819 ],
-          [5000**3, 20325],
-          [6000**3, 40480],
-          [7000**3, 77302],
-          [8000**3, 138108],
+          ['O(n^3)', 'Time Plot'],
+          [1000**3, 50 ],
+          [2000**3, 447 ],
+          [3000**3, 1700 ],
+          [4000**3, 5438 ],
+          [5000**3, 14554],
+          [6000**3, 31652],
+          [7000**3, 62000],
+          [8000**3, 105200],
+          [9000**3, 161000],
+          [10000**3, 249000],
         ]);
 
         var options = {
-          title: 'Algorithm Performance, Time(ms) per X+Y',
+          title: 'X axis as O(n^3)',
           curveType: 'function',
           legend: { position: 'bottom' },
           vAxis: {
@@ -54,9 +55,46 @@
         var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
         chart.draw(data, options);
       }
+
+
+      function drawChart2() {
+        var data2 = google.visualization.arrayToDataTable([
+          ['O(n^3 / 2)', 'Time Plot'],
+          [(1000**3)/2, 50 ],
+          [(2000**3)/2, 447 ],
+          [(3000**3)/2, 1700 ],
+          [(4000**3)/2, 5438 ],
+          [(5000**3)/2, 14554],
+          [(6000**3)/2, 31652],
+          [(7000**3)/2, 62000],
+          [(8000**3)/2, 105200],
+          [(9000**3)/2, 161000],
+          [(10000**3)/2, 249000],
+        ]);
+
+        var options2 = {
+          title: 'X axis as O(n^3 / 2)',
+          curveType: 'function',
+          legend: { position: 'bottom' },
+          vAxis: {
+            viewWindow: {
+              min: 0,
+              max: 200000 // Set the maximum value as needed
+            },
+            format: 'decimal'
+          },
+          hAxis: {
+            format: 'scientific'
+          }
+        };
+
+        var chart2 = new google.visualization.LineChart(document.getElementById('curve_chart_2'));
+        chart2.draw(data2, options2);
+      }
     </script>
   </head>
   <body>
     <div id="curve_chart" style="width: 900px; height: 500px"></div>
+    <div id="curve_chart_2" style="width: 900px; height: 500px"></div> 
   </body>
 </html>
