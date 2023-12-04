@@ -12,11 +12,11 @@ int maximizeValue(int X, int Y, vector<vector<int>>& dp) {
     for (int i = 1; i <= X; i++) {
         for (int j = 1; j <= Y; j++) {
             // Consider each guillotine cut and check if it can fit in the current rectangle
-            for (int cutWidth = 1; cutWidth <= i; cutWidth++) {
+            for (int cutWidth = 1; cutWidth <= i/2; cutWidth++) {
                 dp[i][j] = max(dp[i][j], dp[cutWidth][j] + dp[i - cutWidth][j]);
             }
 
-            for (int cutHeight = 1; cutHeight <= j; cutHeight++) {
+            for (int cutHeight = 1; cutHeight <= j/2; cutHeight++) {
                 dp[i][j] = max(dp[i][j], dp[i][cutHeight] + dp[i][j - cutHeight]);
             }
         }

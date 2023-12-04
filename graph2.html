@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function f(X) {
+          // Calculates O(n^3 / 2)
+          return (X**3 / 2);
+      }
+
+      function f2(X) {
+        // Calculates O(n^3)
+        return (X**3);
+      }
+
+      function f3(X) {
+        // Calculates O(n^3 / 3)
+        return (X**3 / 4);
+      }
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['X+Y', 'Time / X+Y * O(n^3)'],
+          [10**3 , 0],
+          [100**3, 1],
+          [1000**3, 94 ],
+          [2000**3, 750 ],
+          [3000**3, 2940 ],
+          [4000**3, 7819 ],
+          [5000**3, 20325],
+          [6000**3, 40480],
+          [7000**3, 77302],
+          [8000**3, 138108],
+        ]);
+
+        var options = {
+          title: 'Algorithm Performance, Time(ms) per X+Y',
+          curveType: 'function',
+          legend: { position: 'bottom' },
+          vAxis: {
+            viewWindow: {
+              min: 0,
+              max: 200000 // Set the maximum value as needed
+            },
+            format: 'decimal'
+          },
+          hAxis: {
+            format: 'scientific'
+          }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="curve_chart" style="width: 900px; height: 500px"></div>
+  </body>
+</html>
