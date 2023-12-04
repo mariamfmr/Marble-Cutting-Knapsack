@@ -4,7 +4,7 @@ LDFLAGS = -lm
 TARGET = cutboardchrono
 
 # List all input files in the tests folder
-INPUT_FILES = $(wildcard tests/*.in)
+INPUT_FILES = $(wildcard testsTime/*.in)
 
 # Create a list of corresponding output files
 OUTPUT_FILES = $(patsubst %.in, %.out, $(INPUT_FILES))
