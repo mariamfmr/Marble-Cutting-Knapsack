@@ -6,34 +6,33 @@
       google.charts.setOnLoadCallback(drawChart);
       google.charts.setOnLoadCallback(drawChart2); // Add this line for the second chart
 
+      // Plots x^3 / 2 into x-axis
       function f(X) {
-          // Calculates O(n^3 / 2)
-          return (X**3 / 2);
-      }
+        return (X**3 / 2);
+    }
 
+      // Plots x^3 into x-axis
       function f2(X) {
-        // Calculates O(n^3)
-        return (X**3);
+        return X**3;
       }
 
-      function f3(X) {
-        // Calculates O(n^3 / 3)
-        return (X**3 / 4);
-      }
-
+      /* 
+      Transforming our graph f(x,y) into f(x^3,y) allows us to see if there is any linear relation
+      between our complexity and O(n^3). In sum, the linear it is the more it confirms our complexity is contained in O(n^3).
+      */
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
           ['O(n^3)', 'Time Plot'],
-          [1000**3, 50 ],
-          [2000**3, 447 ],
-          [3000**3, 1700 ],
-          [4000**3, 5438 ],
-          [5000**3, 14554],
-          [6000**3, 31652],
-          [7000**3, 62000],
-          [8000**3, 105200],
-          [9000**3, 161000],
-          [10000**3, 249000],
+          [f(1000), 50 ],
+          [f(2000), 447 ],
+          [f(3000), 1700 ],
+          [f(4000), 5438 ],
+          [f(5000), 14554],
+          [f(6000), 31652],
+          [f(7000), 62000],
+          [f(8000), 105200],
+          [f(9000), 161000],
+          [f(10000), 249000],
         ]);
 
         var options = {
@@ -60,16 +59,16 @@
       function drawChart2() {
         var data2 = google.visualization.arrayToDataTable([
           ['O(n^3 / 2)', 'Time Plot'],
-          [(1000**3)/2, 50 ],
-          [(2000**3)/2, 447 ],
-          [(3000**3)/2, 1700 ],
-          [(4000**3)/2, 5438 ],
-          [(5000**3)/2, 14554],
-          [(6000**3)/2, 31652],
-          [(7000**3)/2, 62000],
-          [(8000**3)/2, 105200],
-          [(9000**3)/2, 161000],
-          [(10000**3)/2, 249000],
+          [f2(1000), 50 ],
+          [f2(2000), 447 ],
+          [f2(3000), 1700 ],
+          [f2(4000), 5438 ],
+          [f2(5000), 14554],
+          [f2(6000), 31652],
+          [f2(7000), 62000],
+          [f2(8000), 105200],
+          [f2(9000), 161000],
+          [f2(10000), 249000],
         ]);
 
         var options2 = {
@@ -79,7 +78,7 @@
           vAxis: {
             viewWindow: {
               min: 0,
-              max: 200000 // Set the maximum value as needed
+              max: 200000 
             },
             format: 'decimal'
           },

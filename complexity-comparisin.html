@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+
+      /* 
+      The use of a division by 10**6 is so the growing curves can be compared to our execution time.
+      As we know, multiplying a complexity by a constant does not influence the growth curve.
+      */
+
+      // Calculates O(n^3) 
+      function f(X) {
+        return (X**3) / 10**6;
+      }
+
+      // Calculates O(n^3 / 2)
+      function f2(X) {
+          return (X**3 / 2) / 10**6;
+      }
+
+      // Charts of data comparing our algorithm complexity to other complexities
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['X+Y', 'Time / X+Y', 'O(n^3/ 2)', 'O(n^3)'],
+          ['X+Y 10', 0,  f2(10), f(10)],
+          ['1000', 50, f2(1000), f(1000)]
+          ['2000', 447, f2(2000), f(2000)],
+          ['3000', 1700, f2(3000), f(3000)],
+          ['4000', 5438, f2(4000), f(4000)],
+          ['5000', 14554, f2(5000), f(5000)],
+          ['6000', 31652, f2(6000), f(6000)],
+          ['7000', 62000, f2(7000), f(7000)],
+          ['8000', 105200, f2(8000), f(8000)],
+          ['9000', 161000, f2(9000), f(9000)],
+          ['10000', 249000, f2(10000), f(10000)],
+        ]);
+
+        var options = {
+          title: 'Algorithm Performance, Time(ms) per X+Y',
+          curveType: 'function',
+          legend: { position: 'bottom' },
+          vAxis: {
+            viewWindow: {
+              min: 0,
+              max: 200000 
+            },
+            format: 'decimal'
+          }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="curve_chart" style="width: 900px; height: 500px"></div>
+  </body>
+</html>
