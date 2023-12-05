@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -g -std=c++11 -O3 -Wall
 LDFLAGS = -lm
-TARGET = cutboardchrono
+TARGET = marble-chrono
 
 # List all input files in the tests folder
 INPUT_FILES = $(wildcard testsTime/*.in)
@@ -12,9 +12,11 @@ OUTPUT_FILES = $(patsubst %.in, %.out, $(INPUT_FILES))
 # Default target
 all: $(TARGET) $(OUTPUT_FILES)
 
-# Compile the main program
-$(TARGET): cutboardchrono.cpp
-	$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS)
+# Compile the main program only if marble-chrono does not exist
+$(TARGET): marble-chrono.cpp
+	@if [ ! -f $(TARGET) ]; then \
+		$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS); \
+	fi
 
 # Rule to run the program on each input file and redirect the output to .out files
 %.out: %.in $(TARGET)
