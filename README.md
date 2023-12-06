@@ -1,4 +1,4 @@
-# Marble Cutting Optimization
+# Marble Cutting Knapsack
 
 This repository contains a C++ implementation of an algorithm to optimize the cutting of marble sheets, along with a version (`marble-chrono.cpp`) that measures the execution time for each input.
 The problem given aims to maximize the value obtained by cutting a rectangle into smaller pieces, adhering to constraints on dimensions and associated values for each piece. Our proposed solution employs dynamic programming, tabulation, to efficiently calculate the maximum achievable value, considering both horizontal and vertical cuts.
