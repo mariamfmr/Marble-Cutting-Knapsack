@@ -44,13 +44,14 @@ To generate additional tests, use the following command:
 
 ### Contents
 
-    - marble.cpp: Main algorithm implementation in c++ language.
-    - marble.rs: Main algorithm implementation in rust language.
-    - marble-chrono.cpp: Algorithm version that measures execution time.
-    - gen_supermarble.cpp: Auxiliar tool to generate additional test inputs.
+    - src/marble.cpp: Main algorithm implementation in c++ language.
+    - src/marble.rs: Main algorithm implementation in rust language.
+    - src/marble-chrono.cpp: Algorithm version that measures execution time.
+    - src/gen_supermarble.cpp: Auxiliar tool to generate additional test inputs.
+    - makefile: Makefile for building and running (`marble-chrono.cpp`) on all the inputs files in testsTime.
     - relatorio.pdf: Document explaining the main problem, summarizing the solution, and drawing conclusions from both practical and theoretical analyses.
-    - complexity-comparison.html: Graph plotting the time-wise behavior of the algorithm for each X+Y input, comparing it to O(n^3) and O(n^3 / 2).
-    - complexity-linear.html: Graph plotting x^3 and x^3 / 2 into the x-axis with the data.
+    - graphs/complexity-comparison.html: Graph plotting the time-wise behavior of the algorithm for each X+Y input, comparing it to O(n^3) and O(n^3 / 2).
+    - graphs/complexity-linear.html: Graph plotting x^3 and x^3 / 2 into the x-axis with the data.
 
 ### Conclusion
 
