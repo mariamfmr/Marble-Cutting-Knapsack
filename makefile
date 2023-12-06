@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -g -std=c++11 -O3 -Wall
 LDFLAGS = -lm
-TARGET = marble-chrono
+TARGET = src/marble-chrono
 
 # List all input files in the tests folder
 INPUT_FILES = $(wildcard testsTime/*.in)
@@ -13,7 +13,7 @@ OUTPUT_FILES = $(patsubst %.in, %.out, $(INPUT_FILES))
 all: $(TARGET) $(OUTPUT_FILES)
 
 # Compile the main program only if marble-chrono does not exist
-$(TARGET): marble-chrono.cpp
+$(TARGET): src/marble-chrono.cpp
 	@if [ ! -f $(TARGET) ]; then \
 		$(CXX) $(CXXFLAGS) $< -o $@ $(LDFLAGS); \
 	fi
