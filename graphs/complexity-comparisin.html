@@ -5,12 +5,6 @@
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
 
-
-      /* 
-      The use of a division by 10**6 is so the growing curves can be compared to our execution time.
-      As we know, multiplying a complexity by a constant does not influence the growth curve.
-      */
-
       // Calculates O(n^3) 
       function f(X) {
         return (X**3) / 10**6;
@@ -26,7 +20,7 @@
         var data = google.visualization.arrayToDataTable([
           ['X+Y', 'Time / X+Y', 'O(n^3/ 2)', 'O(n^3)'],
           ['X+Y 10', 0,  f2(10), f(10)],
-          ['1000', 50, f2(1000), f(1000)]
+          ['1000', 50, f2(1000), f(1000)], // Added missing comma here
           ['2000', 447, f2(2000), f(2000)],
           ['3000', 1700, f2(3000), f(3000)],
           ['4000', 5438, f2(4000), f(4000)],
